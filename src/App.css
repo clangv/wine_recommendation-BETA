@@ -50,7 +50,6 @@ div, button {
   transition: all 0.3s ease;
 }
 
-
 @media (max-width: 768px) {
   #root {
     padding: 1rem;
@@ -81,3 +80,68 @@ div, button {
     font-size: 1rem;
   }
 }
+
+/* Add at the end of your existing CSS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Add smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Improve focus styles */
+button:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Add glass morphism effect */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Toast styling */
+.toast-success {
+  background-color: #10B981 !important;
+  color: white !important;
+}
+
+.toast-error {
+  background-color: #EF4444 !important;
+  color: white !important;
+}
+
+/* Animation classes */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+
