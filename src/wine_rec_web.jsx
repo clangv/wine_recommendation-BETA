@@ -126,6 +126,12 @@ const WineRecommender = () => {
     }
   };
 
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
   const renderOptionsStep = (key, title, options) => (
     <div className="space-y-6 animate-fadeIn">
       <h2 className="text-xl font-semibold text-white mb-6">{title}</h2>
@@ -133,26 +139,44 @@ const WineRecommender = () => {
         {options.map(option => {
           const isSelected = preferences[key] === option.value;
           return (
-            <button
+            <motion.button
               key={option.value}
               onClick={() => handleSetPreference(key, option.value)}
-              className={`flex-shrink-0 w-[160px] p-4 text-center border rounded-xl transition-all bg-white/5 group
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex-shrink-0 w-[160px] p-4 text-center border rounded-xl transition-all duration-300
+                backdrop-blur-md bg-white/5 group relative overflow-hidden
                 ${isSelected
-                  ? 'border-[#FFD700] bg-white/20 text-[#FFD700]'
-                  : 'border-white/10 hover:border-[#FFD700] hover:bg-white/10'}
-              `}
+                  ? 'border-[#FFD700] bg-[#FFD700]/20 text-[#FFD700]'
+                  : 'border-white/10 hover:border-[#FFD700] hover:bg-[#FFD700]/10'}`}
               aria-pressed={isSelected}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <span className="text-3xl mb-2">{option.emoji}</span>
-                <span className={`text-white font-medium group-hover:text-[#FFD700]`}>
+              <div className="flex flex-col items-center space-y-2 relative z-10">
+                <span className="text-3xl mb-2 transform transition-transform group-hover:scale-110">{option.emoji}</span>
+                <span className="text-white font-medium group-hover:text-[#FFD700] transition-colors duration-200">
                   {option.label}
                 </span>
               </div>
-            </button>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
+                translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+            </motion.button>
           );
         })}
       </div>
+      {currentStep > 1 && (
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handlePrevious}
+          className="mt-6 px-6 py-2 backdrop-blur-md bg-white/5 text-white rounded-md 
+            hover:bg-[#FFD700]/20 transition-all duration-300 flex items-center justify-center gap-2 mx-auto 
+            hover:shadow-lg hover:shadow-white/10 border border-white/10 hover:border-[#FFD700] relative overflow-hidden"
+        >
+          <span className="relative z-10">← Previous</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
+            translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000" />
+        </motion.button>
+      )}
     </div>
   );
 
@@ -183,7 +207,7 @@ const WineRecommender = () => {
           { value: 'expert', label: 'Expert', emoji: '🏆' }
         ]);
       case 5:
-        return renderOptionsStep(PreferenceKeys.OCCASION, 'What’s the occasion?', [
+        return renderOptionsStep(PreferenceKeys.OCCASION, "What's the occasion?", [
           { value: 'casual', label: 'Just Chilling', emoji: '🧘' },
           { value: 'date', label: 'Romantic Date', emoji: '❤️' },
           { value: 'party', label: 'Party Time', emoji: '🎈' }
@@ -227,10 +251,11 @@ const WineRecommender = () => {
         animate={{ opacity: 1 }}
         className="min-h-screen flex justify-center p-4 sm:p-10"
         style={{
-          backgroundImage: "linear-gradient(to bottom right, rgba(28, 15, 26, 0.9), rgba(116, 12, 74, 0.9)), url('/background/background.png')",
+          backgroundImage: "url('/background/background.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
         }}
       >
         <div className="w-full max-w-3xl bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20">
@@ -291,17 +316,29 @@ const WineRecommender = () => {
                         setRecommendation(null);
                         toast.success('Starting over!');
                       }}
-                      className="flex-1 px-4 py-2 bg-[#FFD700] text-black rounded-md hover:bg-[#e6c200] transition flex items-center justify-center gap-2"
+                      className="flex-1 px-4 py-2 backdrop-blur-md bg-[#FFD700]/20 text-[#FFD700] rounded-md 
+                        hover:bg-[#FFD700]/30 transition-all duration-300 flex items-center justify-center gap-2 
+                        hover:shadow-lg hover:shadow-[#FFD700]/20 border border-[#FFD700]/30 hover:border-[#FFD700] relative overflow-hidden"
                     >
-                      <FiRefreshCw /> Start Over
+                      <span className="relative z-10 flex items-center gap-2">
+                        <FiRefreshCw className="transform transition-transform group-hover:rotate-180" /> Start Over
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFD700]/10 to-transparent 
+                        translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000" />
                     </motion.button>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleShare}
-                      className="flex-1 px-4 py-2 bg-white/20 text-white rounded-md hover:bg-white/30 transition flex items-center justify-center gap-2"
+                      className="flex-1 px-4 py-2 backdrop-blur-md bg-white/5 text-white rounded-md 
+                        hover:bg-[#FFD700]/20 transition-all duration-300 flex items-center justify-center gap-2 
+                        hover:shadow-lg hover:shadow-white/10 border border-white/10 hover:border-[#FFD700] relative overflow-hidden"
                     >
-                      <FiShare2 /> Share
+                      <span className="relative z-10 flex items-center gap-2">
+                        <FiShare2 className="transform transition-transform group-hover:rotate-12" /> Share
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
+                        translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000" />
                     </motion.button>
                   </div>
                 </div>
